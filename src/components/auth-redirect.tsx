@@ -31,11 +31,11 @@ export function AuthRedirect({ children }: { children: ReactNode }) {
 
   // While loading, or if redirection is about to happen, don't render children
   if (loading || (user && isAuthRoute) || (!user && isProtectedRoute)) {
-    // You can return a global loader here if you have one
     return (
       <div className="flex h-screen w-full items-center justify-center bg-background">
         <div className="flex flex-col items-center gap-4">
-           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary" />
+          <p className="text-sm text-muted-foreground animate-pulse">Loading TravelSync...</p>
         </div>
       </div>
     );
