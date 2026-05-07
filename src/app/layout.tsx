@@ -5,6 +5,7 @@ import { AuthProvider } from '@/context/auth-context';
 import { FirebaseClientProvider } from '@/firebase';
 import { AuthRedirect } from '@/components/auth-redirect';
 import { ThemeProvider } from '@/components/theme-provider';
+import ChatWidget from '@/components/chat/chat-widget';
 import './i18n';
 
 export const metadata: Metadata = {
@@ -53,6 +54,7 @@ export default function RootLayout({
           >
             <AuthProvider>
               <AuthRedirect>{children}</AuthRedirect>
+              <ChatWidget />
               <Toaster />
             </AuthProvider>
           </ThemeProvider>
