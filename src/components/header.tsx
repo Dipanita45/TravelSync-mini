@@ -29,7 +29,7 @@ export default function Header({ children }: { children?: ReactNode }) {
             <span className="hidden sm:inline">New Trip</span>
           </Link>
         </Button>
-        { user && <UserNav user={user} /> }
+        { user && <UserNav user={user} isSidebarOpen={false} /> }
       </div>
     </header>
   );
