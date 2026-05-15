@@ -1,4 +1,5 @@
 "use client";
+import * as React from "react";
 import { motion } from "framer-motion";
 
 // Fade up on enter — use for cards, sections
