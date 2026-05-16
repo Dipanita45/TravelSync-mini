@@ -3,6 +3,7 @@
 import { useAuth } from '@/context/auth-context';
 import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, type ReactNode } from 'react';
+import { LoadingState } from '@/components/loading-state';
 
 const AUTH_ROUTES = ['/login', '/signup', '/'];
 const PROTECTED_ROUTES = ['/dashboard', '/budget', '/trips/new', '/updates'];
@@ -39,6 +40,7 @@ export function AuthRedirect({ children }: { children: ReactNode }) {
         </div>
       </div>
     );
+    return <LoadingState message="Authenticating..." className="h-screen w-full" />;
   }
 
   // If no redirection is needed, render the page content
