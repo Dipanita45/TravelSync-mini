@@ -10,11 +10,19 @@ import {
   CollectionReference,
 } from 'firebase/firestore';
 import { errorEmitter } from '@/firebase/error-emitter';
+import { getStorage } from 'firebase/storage';
+export const storage = getStorage(app);
 import { FirestorePermissionError } from '@/firebase/errors';
 
 /** Utility type to add an 'id' field to a given type T. */
 export type WithId<T> = T & { id: string };
 
+import { storage } from '@/firebase';
+import {
+  ref,
+  uploadBytes,
+  getDownloadURL,
+} from 'firebase/storage';
 /**
  * Interface for the return value of the useCollection hook.
  * @template T Type of the document data.

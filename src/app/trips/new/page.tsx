@@ -39,7 +39,19 @@ import { useToast } from '@/hooks/use-toast';
 import { useAuth } from '@/context/auth-context';
 import { useFirestore } from '@/firebase';
 import { addDoc, collection, doc, updateDoc, Timestamp } from 'firebase/firestore';
+const [selectedImage, setSelectedImage] = useState<File | null>(null);
+const [imagePreview, setImagePreview] = useState<string | null>(null);
 
+const handleImageChange = (
+  e: React.ChangeEvent<HTMLInputElement>
+) => {
+  const file = e.target.files?.[0];
+
+  if (file) {
+    setSelectedImage(file);
+    setImagePreview(URL.createObjectURL(file));
+  }
+};
 const formSchema = z.object({
   destination: z
     .string()
@@ -83,6 +95,33 @@ export default function NewTripPage() {
   }, [destinationParam, form]);
 
 
+  <FormItem>
+  <FormLabel>Trip Image</FormLabel>
+
+  <FormControl>
+    <Input
+      type="file"
+      accept="image/*"
+      onChange={handleImageChange}
+    />
+  </FormControl>
+
+  <FormDescription>
+    Upload a photo for your trip destination.
+  </FormDescription>
+
+  {imagePreview && (
+    <div className="mt-4">
+      <img
+        src={imagePreview}
+        alt="Preview"
+        className="h-52 w-full rounded-lg object-cover border"
+      />
+    </div>
+  )}
+
+  
+</FormItem>
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     if (!user || !firestore) {
       toast({
@@ -98,7 +137,7 @@ export default function NewTripPage() {
       (values.dates.to.getTime() - values.dates.from.getTime()) /
         (1000 * 3600 * 24) +
       1;
-
+    
     try {
       // First, create the trip document to get an ID
       const tripsCollection = collection(firestore, 'trips');
@@ -109,7 +148,18 @@ export default function NewTripPage() {
         endDate: Timestamp.fromDate(values.dates.to),
         ownerId: user.uid,
         collaboratorIds: [user.uid],
-        imageUrl: `https://picsum.photos/seed/${Math.random()}/600/400`,
+        let imageUrl = `https://picsum.photos/seed/${Math.random()}/600/400`;
+
+if (selectedImage) {
+  const imageRef = ref(
+    storage,
+    `trip-images/${user.uid}/${Date.now()}-${selectedImage.name}`
+  );
+
+  await uploadBytes(imageRef, selectedImage);
+
+  imageUrl = await getDownloadURL(imageRef);
+}
         imageHint: 'travel landscape',
         itinerary: [], // Start with an empty itinerary
         budget: values.budget || 0,
